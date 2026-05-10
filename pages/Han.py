@@ -6,8 +6,9 @@ import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
+from utils.helpers import load_data
 
-st.set_page_config(page_title="23127361", layout="wide")
+st.set_page_config(page_title="Chân Dung & Giá Trị Bất Động Sản", layout="wide")
 
 # Bảng màu Okabe-Ito - Đảm bảo độ tương phản cao và dễ nhìn cho người mù màu
 OKABE_ITO = [
@@ -121,10 +122,10 @@ st.markdown("""
 # TIÊU ĐỀ CHÍNH
 st.markdown("<h1 class='main-title'>Chân Dung & Giá Trị Bất Động Sản</h1>", unsafe_allow_html=True)
 
-# Hàm tải và làm sạch dữ liệu, được cache để tối ưu hiệu suất
+# Làm sạch dữ liệu riêng cho trang Han, tái sử dụng loader dùng chung
 @st.cache_data
-def load_data():
-    df = pd.read_csv("data/vietnam_housing_dataset_cleaned.csv")
+def load_han_data():
+    df = load_data().copy()
     df.columns = df.columns.str.strip()
     
     # Chuyển đổi các cột số sang kiểu dữ liệu số, bỏ qua lỗi và thay thế bằng NaN nếu không thể chuyển đổi
@@ -163,7 +164,7 @@ def load_data():
     return df
 
 try:
-    df = load_data()
+    df = load_han_data()
 
     if df.empty:
         st.error("Dữ liệu trống. Vui lòng kiểm tra lại file CSV gốc.")

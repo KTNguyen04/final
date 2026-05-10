@@ -4,12 +4,13 @@ import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 import streamlit as st
+from utils.helpers import load_data
 
 
-# === Load & chuẩn hóa ===
+# === Chuẩn hóa cho trang HLuong ===
 @st.cache_data
-def load_data():
-    df = pd.read_csv("data/vietnam_housing_dataset_cleaned.csv")
+def load_hluong_data():
+    df = load_data().copy()
     # Fix NFD -> NFC (4 dòng 'Hà Nội' bị encode lệch trong CSV)
     df["Province"] = df["Province"].apply(
         lambda x: unicodedata.normalize("NFC", x) if isinstance(x, str) else x
@@ -38,7 +39,7 @@ def load_data():
     return df
 
 
-df = load_data()
+df = load_hluong_data()
 
 # === Header ==================
 st.title("Phân tích Giá BĐS theo Địa lý")

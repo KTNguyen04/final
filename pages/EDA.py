@@ -3,13 +3,7 @@ import pandas as pd
 import numpy as np
 import plotly.express as px
 import plotly.graph_objects as go
-
-# ── Load data ────────────────────────────────────────────
-@st.cache_data
-def load_data():
-    df = pd.read_csv("data/vietnam_housing_dataset.csv")
-    return df
-
+from utils.helpers import load_data
 
 df = load_data()
 

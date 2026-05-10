@@ -1,16 +1,7 @@
 import streamlit as st
-import pandas as pd
-import numpy as np
 import plotly.express as px
 import plotly.graph_objects as go
-from plotly.subplots import make_subplots
-
-
-# ── Load data ────────────────────────────────────────────
-@st.cache_data
-def load_data():
-    df = pd.read_csv("data/vietnam_housing_dataset_cleaned.csv")
-    return df
+from utils.helpers import load_data
 
 
 df = load_data()
