@@ -7,7 +7,7 @@ import streamlit as st
 from utils.helpers import load_data
 
 
-# === Chuẩn hóa cho trang HLuong ===
+# === Load & chuẩn hóa ===
 @st.cache_data
 def load_hluong_data():
     df = load_data().copy()
@@ -19,7 +19,7 @@ def load_hluong_data():
     df["Price_segment"] = pd.cut(
         df["Price"],
         bins=[0, 3, 5, 7, 9, float("inf")],
-        labels=["<3 tỷ", "3–5 tỷ", "5–7 tỷ", "7–9 tỷ", ">9 tỷ"],
+        labels=["<3 tỷ", "3-5 tỷ", "5-7 tỷ", "7-9 tỷ", ">9 tỷ"],
     ).astype(str)
     # Phân vùng địa lý
     bac = [
@@ -46,9 +46,7 @@ st.title("Phân tích Giá BĐS theo Địa lý")
 st.markdown(
     """
 ### Câu hỏi phân tích
-> **Thị trường bất động sản phân bố và định giá như thế nào giữa các tỉnh thành Việt Nam?
-> Hà Nội hay TP.HCM đắt hơn? Quận/huyện nào là "đắt đỏ nhất"?
-> Tại sao Hưng Yên xuất hiện dày đặc trong top giá cao?**
+> Thị trường bất động sản phân bố và định giá như thế nào giữa các tỉnh thành Việt Nam?
 
 Phân tích tập trung vào: `Province`, `District`, `Price`, `Price_per_m2`, `Region`, `Is_Project`.
 """
@@ -98,8 +96,8 @@ st.markdown(
 **Biểu đồ cột ngang** xếp hạng 15 tỉnh thành có đơn giá/m^2 trung bình cao nhất.
 Đơn vị: **triệu VND/m^2** - Chỉ tính tỉnh có >= 30 bất động sản.
 
-> **Lưu ý:** Hưng Yên đứng thứ 2 toàn quốc (113 tr/m^2), cao hơn TP.HCM (106 tr/m^2)
-> — lý do: **98% BĐS tại Hưng Yên là nhà dự án** (chủ yếu Vinhomes Ocean Park),
+> **Đáng chú ý:** Hưng Yên đứng thứ 2 toàn quốc (112 tr/m^2), cao hơn TP.HCM (105 tr/m^2)
+> — lý do đưa ra: **98% BĐS tại Hưng Yên là nhà dự án** (chủ yếu Vinhomes Ocean Park),
 > đẩy giá/m^2 lên cao bất thường so với quy mô kinh tế thực tế của tỉnh.
 """
 )
@@ -143,9 +141,9 @@ fig1.update_layout(
 # Chú thích màu
 st.plotly_chart(fig1, use_container_width=True)
 col_leg1, col_leg2, col_leg3 = st.columns(3)
-col_leg1.markdown("**Hà Nội** — đắt nhất toàn quốc (149 tr/m^2)")
+col_leg1.markdown("**Hà Nội** — đắt nhất toàn quốc (146 tr/m^2)")
 col_leg2.markdown("**Hưng Yên** — outlier do 98% là nhà dự án")
-col_leg3.markdown("**TP.HCM** — thị trường lớn nhất (106 tr/m^2)")
+col_leg3.markdown("**TP.HCM** — thị trường lớn nhất (105 tr/m^2)")
 
 # ==========================================
 # 2. BOX: Phân phối giá 6 thành phố lớn nhất
@@ -186,8 +184,8 @@ hcm_med = dff[dff["Province"]=="Hồ Chí Minh"]["Price"].median()
 hn_med  = dff[dff["Province"]=="Hà Nội"]["Price"].median()
 bd_med  = dff[dff["Province"]=="Bình Dương"]["Price"].median() if "Bình Dương" in dff["Province"].values else None
 st.info(
-    f"**Insight:** TP.HCM (median {hcm_med:.1f} tỷ) nhỉnh hơn Hà Nội (median {hn_med:.1f} tỷ) "
-    f"về giá bán tuyệt đối, nhưng **Hà Nội đắt hơn về giá/m^2** (149 vs 106 tr/m^2) do "
+    f"TP.HCM (median ~{hcm_med:.1f} tỷ) nhỉnh hơn Hà Nội (median ~{hn_med:.1f} tỷ) "
+    f"về giá bán tuyệt đối, nhưng **Hà Nội đắt hơn về giá/m^2** (146 vs 105 tr/m^2) do "
     f"diện tích trung bình nhà Hà Nội nhỏ hơn TP.HCM. "
     + (f"Bình Dương (median {bd_med:.1f} tỷ) — thị trường vệ tinh giá rẻ hơn 40%." if bd_med else "")
 )
@@ -195,7 +193,7 @@ st.info(
 # ==============================================
 # 3. STACKED BAR: Cơ cấu phân khúc giá theo tỉnh
 # ==============================================
-st.subheader("3. Cơ cấu phân khúc thị trường theo Tỉnh thành")
+st.subheader("3. Cơ cấu phân khúc thị trường theo tỉnh thành")
 st.markdown(
     """
 **Biểu đồ cột xếp chồng (%)** thể hiện tỷ trọng từng phân khúc giá trong cơ cấu
@@ -205,7 +203,7 @@ nguồn cung tại 8 tỉnh thành lớn nhất.
 )
 
 top8 = prov_stats.nlargest(8, "Count")["Province"].tolist()
-seg_order = ["<3 tỷ", "3–5 tỷ", "5–7 tỷ", "7–9 tỷ", ">9 tỷ"]
+seg_order = ["<3 tỷ", "3-5 tỷ", "5-7 tỷ", "7-9 tỷ", ">9 tỷ"]
 seg_colors = ["#2A9D8F", "#A8DADC", "#E9C46A", "#F4A261", "#E63946"]
 
 df_seg = (
@@ -236,8 +234,8 @@ fig3.update_layout(
 )
 st.plotly_chart(fig3, use_container_width=True)
 st.info(
-    "**Insight:** Bình Dương có 74% BĐS dưới 5 tỷ — thị trường bình dân điển hình. "
-    "TP.HCM và Hà Nội tập trung nhiều nhất ở phân khúc 5–9 tỷ (~60%). "
+    "Bình Dương có 76% BĐS dưới 5 tỷ — thị trường bình dân điển hình. "
+    "TP.HCM và Hà Nội tập trung nhiều nhất ở phân khúc 5-9 tỷ (~60%). "
     "Hà Nội có tỷ trọng >9 tỷ cao hơn TP.HCM, phản ánh giá/m^2 đắt hơn."
 )
 
@@ -308,7 +306,7 @@ else:
         f"**{selected_city}:** Quận/huyện đắt nhất là **{top_dist['District']}** "
         f"({top_dist['Avg_Pm2']:.0f} tr/m^2), đắt hơn quận rẻ nhất "
         f"(**{bot_dist['District']}** — {bot_dist['Avg_Pm2']:.0f} tr/m^2) "
-        f"tới **{ratio:.1f} lần** — cho thấy chênh lệch địa lý nội tỉnh rất lớn."
+        f"tới **{ratio:.1f} lần** — cho thấy độ chênh lệch địa lý nội tỉnh."
     )
 
 # ==============================================
@@ -383,7 +381,7 @@ summary.columns = [
 ]
 st.dataframe(summary, use_container_width=True, hide_index=True)
 
-# === Key Insights =========─
+# === Key Insights =========
 st.markdown("---")
 
 # Tính dynamic từ data thực
@@ -416,4 +414,188 @@ with c3:
         f"dù quy mô kinh tế nhỏ hơn rất nhiều. Nguyên nhân: "
         f"**98% BĐS là nhà dự án** (Vinhomes Ocean Park), "
         f"đẩy giá/m^2 lên mức không đại diện cho mặt bằng chung."
+    )
+
+# MỤC TIÊU 2
+# Câu hỏi: "Yếu tố Dự án bóp méo giá địa lý như thế nào?
+# Tỉnh nào có chênh lệch giá Dự án vs Nhà phố lớn nhất?"
+
+st.markdown("---")
+st.markdown("""
+### Câu hỏi phân tích:
+> Việc tập trung dự án BĐS tại một số tỉnh thành ảnh hưởng thế nào đến mặt bằng giá địa phương?
+
+Phân tích tập trung vào: `Is_Project`, `Province`, `Price_per_m2`, `Region`.
+""")
+
+# Chuẩn bị dữ liệu 
+top_prov_list = (
+    prov_stats.query("Count >= 50").nlargest(12, "Count")["Province"].tolist()
+)
+df_top = dff[dff["Province"].isin(top_prov_list)].copy()
+
+# Giá/m^2 trung bình cho từng nhóm (Dự án / Nhà phố) theo tỉnh
+proj_gap = (
+    df_top.groupby(["Province", "Is_Project"])["Price_per_m2"]
+    .mean()
+    .mul(1000)
+    .reset_index()
+    .rename(columns={"Price_per_m2": "Avg_Pm2"})
+)
+proj_gap["Loại"] = proj_gap["Is_Project"].map({1: "Nhà dự án", 0: "Nhà phố / Thổ cư"})
+
+# Sắp xếp tỉnh theo Avg_Pm2 của nhà phố giảm dần (baseline tự nhiên)
+order_proj = (
+    proj_gap[proj_gap["Is_Project"] == 0]
+    .sort_values("Avg_Pm2", ascending=False)["Province"]
+    .tolist()
+)
+# Thêm tỉnh chỉ có dự án (Hưng Yên) nếu chưa có
+for p in top_prov_list:
+    if p not in order_proj:
+        order_proj.append(p)
+
+# 7. GROUPED BAR: Dự án vs Nhà phố theo tỉnh 
+st.subheader("7. So sánh Giá/m^2 Dự án vs Nhà phố theo Tỉnh thành")
+st.markdown("""
+**Biểu đồ cột nhóm** — mỗi tỉnh có 2 cột: nhà dự án (màu đậm) và nhà phố/thổ cư (màu xám).
+Áp dụng nguyên tắc **"Start with gray"**: nhà phố dùng màu nền, nhà dự án nổi bật để so sánh trực tiếp.
+""")
+
+# Màu: Nhà phố = xám (baseline), Dự án = xanh đậm (highlight)
+# Áp dụng đúng nguyên tắc Guideline 4: Start with gray
+color_map_proj = {"Nhà dự án": "#1D3557", "Nhà phố / Thổ cư": "#AAAAAA"}
+
+fig7 = px.bar(
+    proj_gap,
+    x="Province", y="Avg_Pm2",
+    color="Loại",
+    barmode="group",
+    category_orders={"Province": order_proj},
+    color_discrete_map=color_map_proj,
+    text=proj_gap["Avg_Pm2"].apply(lambda x: f"{x:.0f}"),
+    labels={"Province": "Tỉnh/Thành phố", "Avg_Pm2": "Triệu VND/m²", "Loại": "Loại BĐS"},
+    title="Giá/m^2 trung bình: Nhà Dự án vs Nhà Phố/Thổ cư theo Tỉnh thành",
+    height=480,
+)
+fig7.update_traces(textposition="outside", textfont=dict(size=9))
+fig7.update_layout(
+    plot_bgcolor="#FFFFFF", paper_bgcolor="#FFFFFF",
+    font=dict(color="#2C3E50"),
+    xaxis=dict(gridcolor="#E8E8E8", tickangle=-30),
+    yaxis=dict(gridcolor="#E8E8E8"),
+    legend=dict(orientation="h", y=1.08, title=None),
+    margin=dict(t=80, b=60),
+)
+st.plotly_chart(fig7, use_container_width=True)
+
+# Insight động
+proj_only = proj_gap[proj_gap["Is_Project"] == 1].set_index("Province")["Avg_Pm2"]
+nonp_only = proj_gap[proj_gap["Is_Project"] == 0].set_index("Province")["Avg_Pm2"]
+common = proj_only.index.intersection(nonp_only.index)
+if len(common) > 0:
+    premium = ((proj_only[common] - nonp_only[common]) / nonp_only[common] * 100).sort_values(ascending=False)
+    top_prem_prov = premium.index[0]
+    top_prem_val  = premium.iloc[0]
+    avg_prem      = premium.mean()
+    st.info(
+        f"Nhà dự án đắt hơn nhà phố trung bình **{avg_prem:.0f}%** trên toàn quốc. "
+        f"**{top_prem_prov}** có chênh lệch lớn nhất ({top_prem_val:.0f}%), "
+        f"trong khi các tỉnh thành khác (ngoài Hà Nội và TP.HCM) gần như không có chênh lệch"
+    )
+
+# 8. HORIZONTAL BAR: Mức độ Dự án hóa & Price Premium 
+st.subheader("8. Tỷ lệ Dự án hóa và mức độ ảnh hưởng tới giá theo Tỉnh thành")
+st.markdown("""
+**Hai biểu đồ song song** — trái: tỷ lệ % BĐS là dự án; phải: chênh lệch giá dự án so với nhà phố.
+Những tỉnh vừa có tỷ lệ dự án cao vừa có chênh lệch giá lớn là tỉnh bị ảnh hưởng nhiều nhất.
+""")
+
+# Tỷ lệ dự án hóa
+proj_rate = (
+    df_top.groupby("Province")["Is_Project"]
+    .mean()
+    .mul(100)
+    .reset_index()
+    .rename(columns={"Is_Project": "Proj_Rate"})
+    .sort_values("Proj_Rate", ascending=True)
+)
+
+col_a, col_b = st.columns(2)
+
+with col_a:
+    # Alert color palette: tỷ lệ thấp = xám, cao = đỏ cảnh báo
+    colors_rate = [
+        "#E63946" if r >= 80 else "#F4A261" if r >= 40 else "#AAAAAA"
+        for r in proj_rate["Proj_Rate"]
+    ]
+    fig8a = go.Figure(go.Bar(
+        x=proj_rate["Proj_Rate"],
+        y=proj_rate["Province"],
+        orientation="h",
+        marker_color=colors_rate,
+        text=proj_rate["Proj_Rate"].apply(lambda x: f"{x:.0f}%"),
+        textposition="outside",
+    ))
+    fig8a.update_layout(
+        title="Tỷ lệ Nhà Dự án theo Tỉnh thành (%)",
+        xaxis_title="Tỷ lệ (%)",
+        plot_bgcolor="#FFFFFF", paper_bgcolor="#FFFFFF",
+        font=dict(color="#2C3E50", size=11),
+        xaxis=dict(gridcolor="#E8E8E8"),
+        height=420,
+        margin=dict(r=60),
+    )
+    st.plotly_chart(fig8a, use_container_width=True)
+
+with col_b:
+    if len(common) > 0:
+        prem_df = premium.reset_index()
+        prem_df.columns = ["Province", "Premium_Pct"]
+        prem_df = prem_df.sort_values("Premium_Pct", ascending=True)
+
+        colors_prem = [
+            "#E63946" if p >= 30 else "#F4A261" if p >= 10 else
+            "#2A9D8F" if p >= 0 else "#AAAAAA"
+            for p in prem_df["Premium_Pct"]
+        ]
+        fig8b = go.Figure(go.Bar(
+            x=prem_df["Premium_Pct"],
+            y=prem_df["Province"],
+            orientation="h",
+            marker_color=colors_prem,
+            text=prem_df["Premium_Pct"].apply(lambda x: f"+{x:.0f}%"),
+            textposition="outside",
+        ))
+        fig8b.update_layout(
+            title="Chênh lệch giá/m^2: Dự án cao hơn Nhà phố (%)",
+            xaxis_title="Chênh lệch (%)",
+            plot_bgcolor="#FFFFFF", paper_bgcolor="#FFFFFF",
+            font=dict(color="#2C3E50", size=11),
+            xaxis=dict(gridcolor="#E8E8E8"),
+            height=420,
+            margin=dict(r=60),
+        )
+        st.plotly_chart(fig8b, use_container_width=True)
+
+st.markdown("---")
+c_a, c_b, c_c = st.columns(3)
+with c_a:
+    hy_rate = df_top[df_top["Province"]=="Hưng Yên"]["Is_Project"].mean()*100 if "Hưng Yên" in df_top["Province"].values else 98
+    st.error(
+        f"**Hưng Yên — Ảnh hưởng mạnh nhất:** {hy_rate:.0f}% BĐS là dự án. "
+        f"Giá/m^2 ({hy_pm2} tr/m^2) **không đại diện** cho mặt bằng chung địa phương — "
+        f"đây là hiệu ứng Vinhomes Ocean Park tạo ra ảo giác thị trường."
+    )
+with c_b:
+    st.info(
+        "**Nghịch lý trung tâm đô thị:** Tại TP.HCM và Hà Nội, nhà phố trung tâm "
+        "đắt ngang — thậm chí **đắt hơn** — nhà dự án ngoại ô. "
+        "Vị trí quan trọng hơn 'nhãn dự án' tại các đô thị lớn."
+    )
+with c_c:
+    st.success(
+        "**Kết luận phân tích:** Khi đánh giá giá BĐS theo địa lý, "
+        "cần tách biệt **thị trường dự án** và **thị trường thứ cấp (nhà phố)**. "
+        "Gộp chung sẽ dẫn đến kết luận sai lệch về mặt bằng giá thực tế."
     )

@@ -39,7 +39,7 @@ DATA_DICT = {
     "Price": ("Giá bán", "Decimal", "Giá bán bất động sản (tỷ đồng VND)"),
 }
 
-st.title("📊 Mô tả dữ liệu gốc")
+st.title("Mô tả dữ liệu gốc")
 st.caption("Dữ liệu trước khi xử lý — hiển thị nguyên trạng để đánh giá chất lượng")
 st.markdown("---")
 

@@ -1,6 +1,6 @@
 ﻿import streamlit as st
 
-st.title("🏠 House Price Prediction — Vietnam 2024")
+st.title("House Price Prediction — Vietnam 2024")
 st.markdown("---")
 
 # ── Giới thiệu ───────────────────────────────────────────
@@ -22,18 +22,18 @@ with col1:
     )
 
 with col2:
-    st.subheader("⚡ Thông tin nhanh")
-    st.info("📦 **30.000+** bất động sản")
-    st.info("📍 Trải rộng **toàn quốc**")
-    st.info("📅 Thu thập năm **2024**")
-    st.info("💰 Đơn vị giá: **tỷ đồng VND**")
+    st.subheader("Thông tin nhanh")
+    st.info("**30.000+** bất động sản")
+    st.info("Trải rộng **toàn quốc**")
+    st.info("Thu thập năm **2024**")
+    st.info("Đơn vị giá: **tỷ đồng VND**")
 
 st.markdown("---")
 
 # ── Backstory ────────────────────────────────────────────
-st.subheader("📖 Bối cảnh thị trường")
+st.subheader("Bối cảnh thị trường")
 
-tab1, tab2 = st.tabs(["🌊 Làn sóng sốt đất 2020–2022", "🏘️ Thị trường hai phân khúc"])
+tab1, tab2 = st.tabs(["Làn sóng sốt đất 2020–2022", "Thị trường hai phân khúc"])
 
 with tab1:
     st.markdown(
@@ -46,7 +46,7 @@ with tab1:
     )
     st.info(
         """
-    📌 **Liên hệ với dataset**
+    **Liên hệ với dataset**
 
     Dataset được thu thập năm 2024 — sau chu kỳ sốt đất và giai đoạn đóng băng — nên phản ánh
     mặt bằng giá **đã được điều chỉnh**, không phải đỉnh sốt. Tuy nhiên, dấu vết vẫn có thể
@@ -56,20 +56,20 @@ with tab1:
     """
     )
 
-    st.markdown("**📰 Nguồn tham khảo**")
+    st.markdown("**Nguồn tham khảo**")
     st.markdown(
         """
-    - 📰 [VnExpress: Nhà nước can thiệp khi giá nhà đất tăng hơn 20% trong 3 tháng](https://vnexpress.net/nha-nuoc-se-can-thiep-khi-gia-nha-dat-tang-hon-20-trong-3-thang-4779496.html)
-    - 📰 [VnExpress: Có hiệu ứng và thắc thức của bát động sản 2022](https://vnexpress.net/co-hoi-va-thach-thuc-cua-bat-dong-san-2022-4422754.html)
-    - 📰 [VnEconomy: Giá đất vùng ven có xu hướng tiếm cản giá khu vực trung tâm](https://vneconomy.vn/gia-dat-vung-ven-co-xu-huong-tiem-can-gia-khu-vuc-trung-tam.htm)
-    - 📰 [Vov: Kinh té bát động sản Hà Nội — Tung sót nhiều nhất miền Bác giải ra sao?](https://vov.vn/kinh-te/bat-dong-san-hung-yen-tung-sot-nhat-mien-bac-gio-ra-sao-post1215445.vov)
+    - [VnExpress: Nhà nước can thiệp khi giá nhà đất tăng hơn 20% trong 3 tháng](https://vnexpress.net/nha-nuoc-se-can-thiep-khi-gia-nha-dat-tang-hon-20-trong-3-thang-4779496.html)
+    - [VnExpress: Có hiệu ứng và thắc thức của bát động sản 2022](https://vnexpress.net/co-hoi-va-thach-thuc-cua-bat-dong-san-2022-4422754.html)
+    - [VnEconomy: Giá đất vùng ven có xu hướng tiếm cản giá khu vực trung tâm](https://vneconomy.vn/gia-dat-vung-ven-co-xu-huong-tiem-can-gia-khu-vuc-trung-tam.htm)
+    - [Vov: Kinh té bát động sản Hà Nội — Tung sót nhiều nhất miền Bác giải ra sao?](https://vov.vn/kinh-te/bat-dong-san-hung-yen-tung-sot-nhat-mien-bac-gio-ra-sao-post1215445.vov)
     """
     )
 
 with tab2:
     c1, c2 = st.columns(2)
     with c1:
-        st.markdown("#### 🏗️ Nhà dự án (`Is_Project = 1`)")
+        st.markdown("#### Nhà dự án (`Is_Project = 1`)")
         st.markdown(
             """
         Vinhomes, Him Lam, Sun Casa,...
@@ -80,7 +80,7 @@ with tab2:
         """
         )
     with c2:
-        st.markdown("#### 🏠 Nhà phố / thổ cư (`Is_Project = 0`)")
+        st.markdown("#### Nhà phố / thổ cư (`Is_Project = 0`)")
         st.markdown(
             """
         Nhà riêng lẻ, đất thổ cư,...
@@ -93,7 +93,7 @@ with tab2:
 
     st.info(
         """
-    📌 Hai phân khúc được phân biệt qua cột `Is_Project`, cho phép so sánh trực tiếp
+    Hai phân khúc được phân biệt qua cột `Is_Project`, cho phép so sánh trực tiếp
     hành vi giá, mức độ hoàn thiện pháp lý (`Has_certificate`) và tương quan giữa
     đặc điểm vật lý với giá bán giữa hai nhóm.
     """
@@ -102,7 +102,7 @@ with tab2:
 st.markdown("---")
 
 # ── Điểm bất ngờ trong dữ liệu ──────────────────────────
-st.subheader("⚠️ Tính ngoại lệ & Bất ngờ trong dữ liệu")
+st.subheader("Tính ngoại lệ & Bất ngờ trong dữ liệu")
 st.markdown("Bốn điểm cần lưu ý trước khi phân tích:")
 
 c1, c2 = st.columns(2)
