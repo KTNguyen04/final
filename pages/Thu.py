@@ -173,33 +173,30 @@ else:
         with st.container(border=True):
             st.subheader("🏢 Yếu tố định vị thương hiệu")
             with st.expander("📌 Câu hỏi phân tích"):
-            #     st.write("""**Nội dung:** Việc một tài sản nằm trong một khu quy hoạch "Dự án"
-            #     mang lại mức giá trị thặng dư chênh lệch bao nhiêu so với nhà thổ cư riêng lẻ bên ngoài?
-            # """)
                 st.write("**Nội dung:** Mức độ Premium (thặng dư giá) của dự án biến thiên thế nào so với đất thổ cư, và điểm ngưỡng nào giá dự án bắt đầu bão hòa?")
         st.markdown("---") # Đường kẻ phân cách rõ ràng
 
         st.subheader(" Phân tích Thặng dư (Premium)")
         c1, c2 = st.columns([7, 3])
         with c1:
+            # Cập nhật màu Blue và Orange cho Plotly
             fig1 = px.histogram(df, x="Price", color="Loại hình", marginal="box", 
-                                 barmode="overlay", color_discrete_sequence=px.colors.qualitative.Set2)
-            fig1.update_layout(plot_bgcolor="white", title="Phân phối mật độ giá & Điểm bão hòa")
+                                  barmode="overlay", 
+                                  color_discrete_sequence=["#1f77b4", "#ff7f0e"]) 
+            fig1.update_layout(plot_bgcolor="white", title="Phân phối mật độ giá & Điểm bão hòa", xaxis_title="Giá bán (Tỷ VNĐ)", yaxis_title="Số lượng BĐS" )
             st.plotly_chart(fig1, use_container_width=True)
         with c2:
-            # premium = df[df['Is_Project']==1]['Price'].median() - df[df['Is_Project']==0]['Price'].median()
             st.metric("Giá trị Thặng dư (Median)", f"{chenh_lech:,.2f} Tỷ", delta=f"{(chenh_lech/df[df['Is_Project']==0]['Price'].median())*100:.1f}%")
             st.write("**Giải thích:** Khoảng cách giữa hai đỉnh đồ thị thể hiện giá trị thương hiệu dự án.")
 
         st.markdown("#### Tác động của quy hoạch dự án đến giá trị Bất Động Sản")
-        # st.write(f"Nhà trong khu dự án đang có mức giá cao hơn nhà thổ cư tự do khoảng **{chenh_lech:,.2f} tỷ VNĐ** (dựa trên trung vị).")
 
-        col1_t1, col2_t1 = st.columns([6, 4])
+        col1_t1, col2_t1 = st.columns([5, 5])
         
         with col1_t1:
-            # Biểu đồ phân tán giá
-            fig1, ax1 = plt.subplots(figsize=(8, 5))
-            sns.boxplot(data=filtered_df, x='Loại hình', y='Price', ax=ax1, palette='Set2')
+            # Biểu đồ phân tán giá - Cập nhật palette màu Blue/Orange
+            fig1, ax1 = plt.subplots(figsize=(8, 6))
+            sns.boxplot(data=filtered_df, x='Loại hình', y='Price', ax=ax1, palette=['#1f77b4', '#ff7f0e'])
             ax1.set_title("Phân phối giá bán: Dự án vs Thổ cư", fontsize=14, pad=15)
             ax1.set_ylabel("Giá bán (Tỷ VNĐ)")
             ax1.set_xlabel("")
@@ -207,9 +204,9 @@ else:
             st.pyplot(fig1)
             
         with col2_t1:
-            # Biểu đồ tỷ trọng (Thanh khoản/Nguồn cung)
+            # Biểu đồ tỷ trọng - Cập nhật palette màu Blue/Orange
             fig2, ax2 = plt.subplots(figsize=(6, 5))
-            sns.countplot(data=filtered_df, x='Loại hình', ax=ax2, palette='Set2')
+            sns.countplot(data=filtered_df, x='Loại hình', ax=ax2, palette=['#1f77b4', '#ff7f0e'])
             ax2.set_title("Nguồn cung (Thanh khoản) theo Loại hình", fontsize=14, pad=15)
             ax2.set_ylabel("Số lượng tin đăng")
             ax2.set_xlabel("")
@@ -234,11 +231,34 @@ else:
         # Chia làm 2 hàng phân tích
         # HÀNG 1: Pháp lý
         st.subheader("Tương quan Đa nhân tố Pháp lý – Nội thất trong Định giá Tài sản")
-        heatmap_data = df.groupby(['Legal status', 'Furniture state'])['Price'].median().reset_index()
-        fig_heat = px.density_heatmap(heatmap_data, x="Legal status", y="Furniture state", z="Price",
-                                        color_continuous_scale='YlOrRd', text_auto='.2f')
-        st.plotly_chart(fig_heat, use_container_width=True)
 
+        # Dữ liệu
+        heatmap_data = df.groupby(['Legal status', 'Furniture state'])['Price'].median().reset_index()
+
+        # Biểu đồ giữ nguyên màu YlOrRd
+        fig_heat = px.density_heatmap(
+            heatmap_data, 
+            x="Legal status", 
+            y="Furniture state", 
+            z="Price",
+            histfunc="avg", # Xử lý lỗi tự động thêm chữ "sum"
+            color_continuous_scale='YlOrRd', # GIỮ NGUYÊN MÀU CŨ CỦA BẠN
+            text_auto='.2f', 
+            labels={
+                "Price": "Giá trung vị", 
+                "Legal status": "Trạng thái Pháp lý", 
+                "Furniture state": "Mức độ Nội thất"
+            }
+        )
+
+        # Ép nhãn Legend không còn chữ "sum of"
+        fig_heat.update_layout(
+            xaxis_title="Trạng thái Pháp lý",
+            yaxis_title="Mức độ hoàn thiện Nội thất",
+            coloraxis_colorbar=dict(title="Giá trung vị (Tỷ)") # Sửa nhãn ngay tại thanh màu
+        )
+
+        st.plotly_chart(fig_heat, use_container_width=True)
 
         st.subheader("A. Trạng thái Pháp lý (Legal Status)")
         col1_t2, col2_t2 = st.columns(2)
